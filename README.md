@@ -1,722 +1,319 @@
-# 🛒 Professional E-Commerce Platform
+# 🛒 Marketplace — Full-Stack Node.js E-Commerce App
 
-A modern, full-stack e-commerce platform built with Node.js, Express, MongoDB, Vue 3, and TailwindCSS. Features a complete shopping experience with user authentication, product management, shopping cart, order processing, and multi-role administration.
-
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)
-![Vue](https://img.shields.io/badge/vue-3.x-brightgreen.svg)
+A **pure Node.js** e-commerce marketplace with a **Vue 3** frontend. Works completely **offline** — no external database needed. Data is auto-seeded in an in-memory MongoDB on every start.
 
 ---
 
-## ✨ Features
+## 📸 Features
 
-### 🎯 Core Functionality
-- **Multi-Role System**: Admin, Seller, and Customer roles with distinct permissions
-- **Product Management**: Full CRUD operations for products with image uploads
-- **Shop Management**: Sellers can create and manage their own shops
-- **Shopping Cart**: Persistent cart with real-time updates and inventory validation
-- **Order Management**: Complete order lifecycle from checkout to delivery
-- **Payment Integration**: Ready for Stripe, PayPal, and Cash on Delivery
-- **Search & Filter**: Advanced product search with category, price, and rating filters
-- **Review System**: Customer reviews and ratings for products
-- **User Profiles**: Customizable user profiles with order history
-
-### 🎨 Modern UI/UX
-- **Responsive Design**: Mobile-first approach, works on all devices
-- **Professional Styling**: TailwindCSS + DaisyUI for modern, clean interface
-- **Loading States**: Skeleton screens and spinners for better UX
-- **Toast Notifications**: Real-time feedback for user actions
-- **Error Handling**: Graceful error messages and recovery options
-
-### 🔐 Security
-- **JWT Authentication**: Secure token-based authentication
-- **Password Hashing**: Bcrypt encryption for user passwords
-- **Role-Based Access**: Protected routes and API endpoints
-- **Input Validation**: Server-side validation for all inputs
-- **CORS Protection**: Configured CORS for API security
-
-### 📊 Admin Features
-- **User Management**: View, edit, and manage all users
-- **Shop Management**: Approve, monitor, and manage all shops
-- **Product Oversight**: View and manage all products across platform
-- **Order Management**: Monitor and manage all orders
-- **Category Management**: Create and organize product categories
-- **Analytics Dashboard**: Sales, revenue, and user statistics
-
-### 🏪 Seller Features
-- **Shop Dashboard**: Manage shop profile and settings
-- **Product Management**: Add, edit, and remove products
-- **Order Processing**: View and fulfill customer orders
-- **Inventory Tracking**: Monitor stock levels and availability
-- **Sales Analytics**: Track shop performance and revenue
+| Feature | Details |
+|---|---|
+| 🛍️ **50 Demo Products** | Auto-seeded across 10 categories on startup |
+| 📱 **Mobile-First Design** | Sticky header, bottom nav bar, 2-col product grid |
+| 🖥️ **Desktop Layout** | Hero carousel, feature strip, full grids, newsletter |
+| 🔍 **Live Search** | Debounced dropdown with product images + prices |
+| 🏷️ **Category Icons** | 80+ keyword → emoji mappings per category |
+| 🛒 **Cart System** | Add / update / remove items, persisted in session |
+| 🔐 **Auth** | Register, login, JWT sessions (admin / seller / customer) |
+| 🏪 **Shop Pages** | Per-seller storefronts with product listings |
+| 📦 **Order History** | Full order tracking for customers |
+| 🧑‍💼 **Seller Dashboard** | Product & shop management |
+| ⚙️ **Admin Panel** | User / shop / product management |
+| 🔔 **Toast Notifications** | Slide-in from right edge, coloured by type |
+| 🗄️ **Zero-config DB** | In-memory MongoDB, no install needed |
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (No Database Required)
 
-### Prerequisites
+```bash
+# 1. Clone
+git clone https://github.com/cnmasud/Ecommerce_Nodejs.git
+cd Ecommerce_Nodejs
 
-- **Node.js** >= 16.0.0
-- **npm** >= 8.0.0
-- **Docker** & **Docker Compose** (for MongoDB)
-- **Git**
+# 2. Install backend dependencies
+cd backend
+npm install
 
-### Installation
+# 3. Start the backend (auto-seeds 50 products)
+node ./bin/www
+# → http://localhost:3000
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/ecommerce-nodejs.git
-   cd ecommerce-nodejs
-   ```
+# 4. In a new terminal — install & start the frontend
+cd ../frontend
+npm install
+npx vite dev --port 8000
+# → http://localhost:8000
+```
 
-2. **Set up Backend**
-   ```bash
-   cd backend
-   npm install
-   ```
+That's it. **No MongoDB Atlas account, no `.env` files, no Docker** needed for local development.
 
-3. **Configure Environment Variables**
-   ```bash
-   # Create .env file in backend directory
-   cp .env.example .env
-   
-   # Edit .env with your configuration
-   nano .env
-   ```
+---
 
-   Required environment variables:
-   ```env
-   # Server
-   PORT=3000
-   NODE_ENV=development
-   
-   # Database
-   MONGODB_URI=mongodb://admin:password@localhost:27017/ecommerce?authSource=admin
-   
-   # JWT
-   JWT_SECRET=your-super-secret-jwt-key-change-this
-   JWT_EXPIRES_IN=7d
-   
-   # Frontend URL (for CORS)
-   FRONTEND_URL=http://localhost:8000
-   
-   # File Upload
-   MAX_FILE_SIZE=5242880
-   UPLOAD_PATH=./uploads
-   ```
+## 🔑 Demo Credentials
 
-4. **Start MongoDB with Docker**
-   ```bash
-   # From backend directory
-   docker-compose up -d
-   ```
+All accounts use password: **`demo1234`**
 
-   This will start:
-   - MongoDB on `localhost:27017`
-   - Mongo Express (admin UI) on `localhost:8081`
-
-5. **Start Backend Server**
-   ```bash
-   npm run watch
-   ```
-   Backend will run on `http://localhost:3000`
-
-6. **Set up Frontend** (in a new terminal)
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-7. **Configure Frontend Environment**
-   ```bash
-   # Create .env file in frontend directory
-   cp .env.example .env
-   ```
-
-   Frontend `.env`:
-   ```env
-   VITE_BACKENDURL=http://localhost:3000
-   ```
-
-8. **Start Frontend Development Server**
-   ```bash
-   npm run dev
-   ```
-   Frontend will run on `http://localhost:8000`
-
-9. **Access the Application**
-   - **Frontend**: http://localhost:8000
-   - **Backend API**: http://localhost:3000
-   - **Mongo Express**: http://localhost:8081
+| Email | Role | Access |
+|---|---|---|
+| `admin@demo.com` | Admin | Full admin panel |
+| `seller@demo.com` | Seller | Dashboard + shop management |
+| `customer@demo.com` | Customer | Shopping, cart, orders |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-ecommerce-nodejs/
-├── backend/                    # Express.js backend
-│   ├── bin/
-│   │   └── www                # Server entry point
-│   ├── controllers/           # Request handlers
-│   │   ├── admin/            # Admin controllers
-│   │   ├── seller/           # Seller controllers
-│   │   └── user.js           # User controllers
-│   ├── models/               # Mongoose schemas
-│   │   ├── cart.js           # Shopping cart model
-│   │   ├── order.js          # Order model
-│   │   ├── product.js        # Product model
-│   │   ├── review.js         # Review model
-│   │   ├── shop.js           # Shop model
-│   │   ├── site.js           # Site settings model
-│   │   └── user.js           # User model
-│   ├── routes/               # API routes
-│   │   ├── admin.js          # Admin routes
-│   │   ├── main.js           # Public routes
-│   │   ├── seller.js         # Seller routes
-│   │   └── user.js           # User routes
-│   ├── mongo-entrypoint/     # MongoDB initialization
-│   │   └── mongo-init.js     # Database seeding script
-│   ├── uploads/              # Uploaded files (gitignored)
-│   ├── app.js                # Express app configuration
-│   ├── auth.js               # Authentication middleware
-│   ├── upload.js             # File upload configuration
-│   ├── docker-compose.yml    # Docker services
+androdevtraining/
+├── backend/                  # Express + Node.js API
+│   ├── bin/www               # Entry point — starts server + in-memory MongoDB
+│   ├── app.js                # Express app config + middleware
+│   ├── auth.js               # JWT authentication middleware
+│   ├── upload.js             # Multer file upload config
 │   ├── package.json
-│   └── .env.example          # Environment template
+│   ├── .env.example
+│   ├── controllers/
+│   │   ├── index.js          # Public controllers (products, categories, shops, search)
+│   │   ├── cart.js           # Cart CRUD
+│   │   ├── order.js          # Order management
+│   │   ├── user.js           # User profile
+│   │   ├── seller/
+│   │   │   ├── product.js    # Seller product CRUD
+│   │   │   └── shop.js       # Seller shop management
+│   │   └── admin/            # Admin controllers
+│   ├── models/
+│   │   ├── product.js
+│   │   ├── category.js
+│   │   ├── shop.js
+│   │   ├── user.js
+│   │   ├── role.js
+│   │   ├── cart.js
+│   │   └── order.js
+│   ├── routes/
+│   │   ├── main.js           # Public API routes
+│   │   ├── user.js           # Auth routes
+│   │   ├── cart.js
+│   │   ├── order.js
+│   │   ├── seller.js
+│   │   └── admin.js
+│   └── scripts/
+│       ├── seedDemo.js       # Seeds 50 products, 10 categories, 5 shops, 3 users
+│       └── seedRoles.js      # Seeds roles (admin/seller/customer)
 │
-├── frontend/                  # Vue 3 frontend
-│   ├── public/               # Static assets
-│   ├── src/
-│   │   ├── assets/          # Images, styles
-│   │   ├── components/      # Vue components
-│   │   │   ├── admin/       # Admin components
-│   │   │   ├── dashboard/   # Seller dashboard components
-│   │   │   ├── ImageSlideShow.vue
-│   │   │   └── ProductGrid.vue
-│   │   ├── router/          # Vue Router configuration
-│   │   │   └── index.js
-│   │   ├── stores/          # Pinia stores
-│   │   │   ├── cart.js      # Cart state management
-│   │   │   ├── counter.js
-│   │   │   └── user.js      # User state management
-│   │   ├── views/           # Page components
-│   │   │   ├── admin/       # Admin pages
-│   │   │   ├── CartView.vue
-│   │   │   ├── CheckOutView.vue
-│   │   │   ├── DashboardView.vue
-│   │   │   ├── HomeView.vue
-│   │   │   ├── LoginView.vue
-│   │   │   ├── ProductView.vue
-│   │   │   ├── RegisterView.vue
-│   │   │   ├── ShopView.vue
-│   │   │   └── UserProfileView.vue
-│   │   ├── App.vue          # Root component
-│   │   ├── main.js          # App entry point
-│   │   └── index.css        # Global styles
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js       # Vite configuration
-│   ├── tailwind.config.js   # TailwindCSS configuration
-│   └── .env.example         # Environment template
-│
-├── README.md                 # This file
-├── REDESIGN_PLAN.md         # Detailed redesign documentation
-└── .gitignore
+└── frontend/                 # Vue 3 + Vite + Tailwind CSS + DaisyUI
+    ├── index.html
+    ├── vite.config.js
+    ├── tailwind.config.js
+    ├── public/
+    │   └── manifest.json     # PWA manifest
+    └── src/
+        ├── main.js
+        ├── App.vue
+        ├── router/
+        │   └── index.js      # All routes incl. 404 catch-all
+        ├── stores/           # Pinia stores
+        │   ├── user.js
+        │   ├── cart.js
+        │   └── notification.js
+        ├── components/
+        │   ├── SearchBar.vue         # Live dropdown search (debounced, backend-connected)
+        │   ├── ProductGrid.vue       # Responsive product card grid
+        │   ├── ToastNotification.vue # Slide-in toast from right edge
+        │   └── ...
+        ├── utils/
+        │   └── categoryIcons.js      # 80+ category name → emoji mappings
+        └── views/
+            ├── HomeView.vue          # Hero carousel + featured products + shops
+            ├── ProductsView.vue      # All products — filter, sort, paginate
+            ├── ProductView.vue       # Single product detail
+            ├── CategoriesView.vue    # All categories with sample images
+            ├── CategoryView.vue      # Products filtered by category
+            ├── ShopsView.vue         # All shops listing
+            ├── ShopView.vue          # Single shop storefront
+            ├── SearchView.vue        # Full-text search results
+            ├── CartView.vue
+            ├── CheckOutView.vue
+            ├── LoginView.vue
+            ├── RegisterView.vue
+            ├── UserProfileView.vue
+            ├── OrderHistoryView.vue
+            ├── OrderDetailView.vue
+            ├── DashboardView.vue
+            └── admin/AdminView.vue
 ```
 
 ---
 
-## 🔧 Technology Stack
+## 🌐 API Endpoints
 
-### Backend
-| Technology | Purpose |
-|------------|---------|
-| **Node.js** | Runtime environment |
-| **Express.js** | Web framework |
-| **MongoDB** | NoSQL database |
-| **Mongoose** | MongoDB ODM |
-| **JWT** | Authentication |
-| **Bcrypt** | Password hashing |
-| **Multer** | File uploads |
-| **CORS** | Cross-origin resource sharing |
-| **Docker** | Containerization |
+### Public (`/main`)
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/main/product/recent` | All products |
+| GET | `/main/product/show?productID=:id` | Single product |
+| GET | `/main/product/search?q=:term` | Full-text search |
+| GET | `/main/category/all` | All categories |
+| GET | `/main/category/show?categoryID=:id` | Single category |
+| GET | `/main/shop/recent` | All shops |
+| GET | `/main/shop/show?shopID=:id` | Single shop |
+| GET | `/main/site` | Site metadata |
 
-### Frontend
-| Technology | Purpose |
-|------------|---------|
-| **Vue 3** | Progressive JavaScript framework |
-| **Vite** | Build tool and dev server |
-| **Pinia** | State management |
-| **Vue Router** | Client-side routing |
-| **Axios** | HTTP client |
-| **TailwindCSS** | Utility-first CSS framework |
-| **DaisyUI** | TailwindCSS component library |
+### Auth (`/user`)
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/user/register` | Create account |
+| POST | `/user/login` | Login → JWT token |
+| GET | `/user/show?userID=:id` | Get user profile |
 
----
+### Cart (`/cart`) — *requires login*
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/cart` | Get cart |
+| POST | `/cart/add` | Add item |
+| PUT | `/cart/update/:productID` | Update quantity |
+| DELETE | `/cart/remove/:productID` | Remove item |
 
-## 📚 API Documentation
+### Orders (`/order`) — *requires login*
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/order` | List orders |
+| POST | `/order` | Create order |
+| GET | `/order/:id` | Order detail |
 
-### Authentication Endpoints
+### Seller (`/seller`) — *requires Seller role*
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/seller/product/add` | Add product |
+| PUT | `/seller/product/update/:id` | Update product |
+| DELETE | `/seller/product/delete/:id` | Delete product |
+| POST | `/seller/shop/create` | Create shop |
+| PUT | `/seller/shop/update` | Update shop |
 
-#### Register User
-```http
-POST /user/register
-Content-Type: application/json
-
-{
-  "username": "johndoe",
-  "email": "john@example.com",
-  "password": "securepassword123"
-}
-```
-
-#### Login
-```http
-POST /user/login
-Content-Type: application/json
-
-{
-  "email": "john@example.com",
-  "password": "securepassword123"
-}
-
-Response:
-{
-  "token": "jwt-token-here",
-  "user": {
-    "id": "user-id",
-    "email": "john@example.com",
-    "role": "user"
-  }
-}
-```
-
-### Product Endpoints
-
-#### Get Recent Products
-```http
-GET /main/product/recent
-```
-
-#### Get Product by ID
-```http
-GET /main/product/:productID
-```
-
-#### Search Products
-```http
-GET /main/product/search?q=laptop&category=electronics&minPrice=100&maxPrice=1000
-```
-
-### Cart Endpoints (Authenticated)
-
-#### Get User Cart
-```http
-GET /user/cart
-Authorization: Bearer {token}
-```
-
-#### Add to Cart
-```http
-POST /user/cart/add
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "productId": "product-id",
-  "quantity": 2
-}
-```
-
-#### Update Cart Item
-```http
-PUT /user/cart/update/:itemId
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "quantity": 3
-}
-```
-
-#### Remove from Cart
-```http
-DELETE /user/cart/remove/:itemId
-Authorization: Bearer {token}
-```
-
-### Order Endpoints (Authenticated)
-
-#### Create Order
-```http
-POST /user/orders/create
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "items": [...],
-  "shippingAddress": {...},
-  "paymentMethod": "credit_card"
-}
-```
-
-#### Get User Orders
-```http
-GET /user/orders
-Authorization: Bearer {token}
-```
-
-#### Get Order Details
-```http
-GET /user/orders/:orderId
-Authorization: Bearer {token}
-```
-
-For complete API documentation, see [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
+### Admin (`/admin`) — *requires Admin role*
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/admin/user/list` | All users |
+| GET | `/admin/shop/list` | All shops |
+| GET | `/admin/product/list` | All products |
 
 ---
 
-## 👥 User Roles & Permissions
+## 🗄️ Seeded Demo Data
 
-### 🔵 Customer (Default)
-- Browse products and shops
-- Search and filter products
-- Add products to cart
-- Place orders
-- Write product reviews
-- Manage profile
-- View order history
-- Apply to become seller
+| Collection | Count | Details |
+|---|---|---|
+| Products | **50** | 5 per category, with images + descriptions |
+| Categories | **10** | Electronics, Clothing, Home & Garden, Sports, Books, Toys & Games, Beauty, Automotive, Food & Drink, Music |
+| Shops | **5** | TechZone, FashionHub, HomeBliss, SportsWorld, BookNook |
+| Users | **3** | Admin, Seller, Customer |
+| Roles | **3** | admin, seller, customer |
 
-### 🟢 Seller
-- All customer permissions
-- Create and manage one shop
-- Add, edit, delete products
-- View and process orders
-- Manage inventory
-- View sales analytics
-- Respond to reviews
-
-### 🔴 Admin
-- All seller permissions
-- Manage all users
-- Manage all shops
-- Manage all products
-- Manage all orders
-- Create/edit/delete categories
-- View platform analytics
-- System configuration
+> **Data resets on every backend restart** (in-memory MongoDB). See below to persist data.
 
 ---
 
-## 🗄️ Database Schema
+## 🔧 Environment Variables
 
-### User Model
-```javascript
-{
-  username: String,
-  email: String (unique),
-  password: String (hashed),
-  name: String,
-  avatar: String,
-  phone: String,
-  address: {
-    country: String,
-    province: String,
-    city: String,
-    postCode: String,
-    street: String
-  },
-  role: ObjectId (ref: Role),
-  shop: ObjectId (ref: Shop),
-  reviews: [ObjectId] (ref: Review),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
+Copy `backend/.env.example` to `backend/.env`:
 
-### Product Model
-```javascript
-{
-  name: String,
-  images: [String],
-  price: Number,
-  description: String,
-  inventory: {
-    quantity: Number,
-    lowStockThreshold: Number,
-    trackInventory: Boolean
-  },
-  categories: [ObjectId] (ref: ProductCategory),
-  shop: ObjectId (ref: Shop),
-  reviews: [ObjectId] (ref: Review),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Order Model
-```javascript
-{
-  orderNumber: String (unique),
-  user: ObjectId (ref: User),
-  items: [{
-    product: ObjectId (ref: Product),
-    quantity: Number,
-    price: Number,
-    shop: ObjectId (ref: Shop)
-  }],
-  shippingAddress: Object,
-  paymentMethod: String,
-  paymentStatus: String,
-  orderStatus: String,
-  subtotal: Number,
-  shippingFee: Number,
-  tax: Number,
-  total: Number,
-  trackingNumber: String,
-  statusHistory: [Object],
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
----
-
-## 🎨 UI Components
-
-### Design System
-- **Colors**: Professional blue/purple palette
-- **Typography**: Inter/System UI fonts
-- **Spacing**: Consistent 4px grid system
-- **Components**: Reusable Vue components with TailwindCSS
-
-### Key Components
-- `ProductGrid.vue` - Responsive product grid
-- `ImageSlideShow.vue` - Product image carousel
-- `CartItem.vue` - Shopping cart item
-- `OrderCard.vue` - Order summary card
-- `SearchBar.vue` - Search with autocomplete
-- `FilterSidebar.vue` - Product filtering
-- `Toast.vue` - Notification system
-
----
-
-## 🧪 Testing
-
-### Run Tests
-```bash
-# Backend tests
-cd backend
-npm test
-
-# Frontend tests
-cd frontend
-npm test
-```
-
-### Manual Testing Checklist
-- [ ] User registration and login
-- [ ] Product browsing and search
-- [ ] Add to cart functionality
-- [ ] Checkout process
-- [ ] Order placement
-- [ ] Seller dashboard
-- [ ] Admin panel
-- [ ] Mobile responsiveness
-
----
-
-## 🚀 Deployment
-
-### Production Build
-
-#### Backend
-```bash
-cd backend
-npm install --production
-NODE_ENV=production npm start
-```
-
-#### Frontend
-```bash
-cd frontend
-npm run build
-# Serve the dist/ folder with nginx or similar
-```
-
-### Docker Deployment
-```bash
-# Build and run with Docker Compose
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-### Environment Variables (Production)
 ```env
-NODE_ENV=production
+# Server
 PORT=3000
-MONGODB_URI=mongodb://user:pass@your-mongo-host:27017/ecommerce
-JWT_SECRET=your-production-secret-key
-FRONTEND_URL=https://yourdomain.com
+NODE_ENV=development
+
+# JWT
+JWT_SECRET=your_super_secret_key_here
+
+# MongoDB (optional — leave blank to use in-memory demo mode)
+MONGODB_URI=
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:8000
 ```
 
-For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
+Copy `frontend/.env.example` to `frontend/.env`:
+
+```env
+VITE_BACKENDURL=http://localhost:3000
+```
+
+### To use a real MongoDB (persist data)
+
+Set `MONGODB_URI` in `backend/.env`:
+
+```env
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/marketplace
+```
+
+MongoDB Atlas free tier: https://www.mongodb.com/atlas
 
 ---
 
-## 🔒 Security Best Practices
+## 🛣️ Frontend Routes
 
-1. **Environment Variables**: Never commit `.env` files
-2. **JWT Secret**: Use strong, random secret keys
-3. **Password Policy**: Enforce minimum 8 characters
-4. **Input Validation**: Validate all user inputs
-5. **Rate Limiting**: Implement API rate limiting
-6. **HTTPS**: Use SSL certificates in production
-7. **CORS**: Configure allowed origins properly
-8. **Dependencies**: Keep packages updated
-9. **MongoDB**: Use authentication and access control
-10. **File Uploads**: Validate file types and sizes
-
----
-
-## 🐛 Troubleshooting
-
-### MongoDB Connection Issues
-```bash
-# Check if MongoDB is running
-docker ps
-
-# View MongoDB logs
-docker logs ecommerce_mongodb
-
-# Restart MongoDB
-docker-compose restart mongo
-```
-
-### Port Already in Use
-```bash
-# Find process using port 3000
-lsof -i :3000
-
-# Kill the process
-kill -9 <PID>
-```
-
-### Frontend Build Errors
-```bash
-# Clear node_modules and reinstall
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### CORS Errors
-- Ensure `FRONTEND_URL` in backend `.env` matches your frontend URL
-- Check CORS configuration in [`backend/app.js`](backend/app.js)
+| Route | Page |
+|---|---|
+| `/` | Home — hero + featured products + categories + shops |
+| `/products` | All products (filter + sort + pagination) |
+| `/product/:id` | Product detail |
+| `/categories` | Category grid |
+| `/category/:id` | Products in a category |
+| `/shops` | All shops |
+| `/shop/:id` | Shop storefront |
+| `/search?q=…` | Search results |
+| `/cart` | Shopping cart |
+| `/checkout` | Checkout |
+| `/login` | Login |
+| `/register` | Register |
+| `/profile` | User profile |
+| `/orders` | Order history |
+| `/order/:id` | Order detail |
+| `/dashboard` | Seller dashboard |
+| `/admin` | Admin panel |
 
 ---
 
-## 📈 Roadmap
+## 🛠️ Tech Stack
 
-### Phase 1: Core Features (Current)
-- [x] User authentication
-- [x] Product management
-- [x] Shop management
-- [x] Basic admin panel
-- [ ] Shopping cart (In Progress)
-- [ ] Order management (In Progress)
+| Layer | Technology |
+|---|---|
+| **Runtime** | Node.js |
+| **Backend framework** | Express 4 |
+| **Database** | MongoDB via Mongoose |
+| **In-memory DB** | mongodb-memory-server (dev/demo) |
+| **Auth** | JWT + bcryptjs |
+| **File uploads** | Multer |
+| **Frontend framework** | Vue 3 (Composition API) |
+| **Build tool** | Vite 2 |
+| **Styling** | Tailwind CSS + DaisyUI |
+| **State management** | Pinia |
+| **HTTP client** | Axios |
+| **Routing** | Vue Router 4 |
 
-### Phase 2: Enhanced Features
-- [ ] Payment gateway integration (Stripe)
-- [ ] Email notifications
-- [ ] Advanced search and filtering
-- [ ] Product recommendations
-- [ ] Wishlist functionality
-- [ ] Product comparison
+---
 
-### Phase 3: Advanced Features
-- [ ] Real-time chat support
-- [ ] Multi-language support
-- [ ] Mobile app (React Native)
-- [ ] Advanced analytics
-- [ ] Inventory forecasting
-- [ ] Loyalty program
+## 📱 Mobile Support
 
-### Phase 4: Scale & Optimize
-- [ ] Microservices architecture
-- [ ] Redis caching
-- [ ] CDN integration
-- [ ] Load balancing
-- [ ] Performance optimization
-- [ ] SEO optimization
+- Sticky header with hamburger menu
+- Fixed bottom navigation bar (Home / Search / Cart / Orders / Account)
+- 2-column product grid on mobile
+- Touch-friendly cards and buttons
+- Full-screen search overlay
+- PWA manifest (`public/manifest.json`)
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m "feat: add my feature"`
+4. Push to the branch: `git push origin feature/my-feature`
 5. Open a Pull Request
-
-### Coding Standards
-- Follow ESLint configuration
-- Write meaningful commit messages
-- Add comments for complex logic
-- Update documentation for new features
-- Write tests for new functionality
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👨‍💻 Authors
-
-- **Original Author** - [ericnanhu](https://github.com/ericnanhu)
-- **Contributors** - See [CONTRIBUTORS.md](CONTRIBUTORS.md)
-
----
-
-## 🙏 Acknowledgments
-
-- Vue.js team for the amazing framework
-- TailwindCSS for the utility-first CSS framework
-- DaisyUI for beautiful components
-- MongoDB team for the database
-- Express.js community
-- All contributors and users
-
----
-
-## 📞 Support
-
-- **Documentation**: [REDESIGN_PLAN.md](./REDESIGN_PLAN.md)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/ecommerce-nodejs/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/ecommerce-nodejs/discussions)
-- **Email**: support@yourdomain.com
-
----
-
-## 📊 Project Status
-
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Coverage](https://img.shields.io/badge/coverage-75%25-yellow.svg)
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
-
-**Current Version**: 2.0.0  
-**Status**: Active Development  
-**Last Updated**: June 2026
-
----
-
-<div align="center">
-  <p>Made with ❤️ by the development team</p>
-  <p>⭐ Star this repo if you find it helpful!</p>
-</div>
+MIT © [cnmasud](https://github.com/cnmasud)
