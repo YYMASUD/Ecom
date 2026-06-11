@@ -1,5 +1,0 @@
-Email	Role
-admin@demo.com	Admin demo1234
-seller@demo.com	Seller (has shop + products)  demo1234
-customer@demo.com	Customer
-
