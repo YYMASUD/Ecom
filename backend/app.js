@@ -94,21 +94,10 @@ app.get('/health', (req, res) => {
   });
 });
 
-// ── Serve Vue SPA (production only) ───────────────────────
-// The frontend build is copied to public/app/ during Railway's build step.
-// All non-API routes fall through to index.html so Vue Router handles them.
-const vueDist = path.join(__dirname, 'public', 'app');
-if (require('fs').existsSync(vueDist)) {
-  app.use(express.static(vueDist, { maxAge: '1y', immutable: true }));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(vueDist, 'index.html'));
-  });
-} else {
-  // catch 404 and forward to error handler (local dev — Vue runs on its own Vite server)
-  app.use(function (req, res, next) {
-    next(createError(404));
-  });
-}
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
 
 // error handler
 app.use(function (err, req, res, next) {
