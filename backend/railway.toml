@@ -1,9 +1,10 @@
-# backend/railway.toml — Railway runs this from the backend/ directory
-# We navigate up to build the Vue frontend, then copy dist here.
+# backend/railway.toml
+# Vue frontend is pre-built and included in backend/public/app/
+# Railway only needs to install Node.js dependencies and start the server.
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install --omit=dev && cd ../frontend && npm install && npm run build && cd ../backend && mkdir -p public/app && cp -r ../frontend/dist/. public/app/"
+buildCommand = "npm install --omit=dev"
 
 [deploy]
 startCommand = "node server.js"

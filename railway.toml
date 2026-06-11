@@ -1,10 +1,9 @@
-# Root-level railway.toml — deploys backend + frontend from the same service
-# Build: install + compile the Vue frontend, then install the Express backend
-# Start: run the Express server which also serves the Vue dist as static files
+# Root railway.toml — monolith deploy: builds Vue frontend + serves from Express backend
+# Railway uploads the full repo, builds here, and starts the Express server.
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "cd frontend && npm install && npm run build && cp -r dist ../backend/public/app && cd ../backend && npm install --omit=dev"
+buildCommand = "cd frontend && npm install && npm run build && mkdir -p ../backend/public/app && cp -r dist/. ../backend/public/app/ && cd ../backend && npm install --omit=dev"
 
 [deploy]
 startCommand = "node backend/server.js"
