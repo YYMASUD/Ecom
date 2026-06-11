@@ -1,10 +1,8 @@
 /**
  * server.js — Application entry point
  *
- * 1. Load environment variables
- * 2. Connect to MongoDB (in-memory if MONGODB_URI is not set)
- * 3. Auto-seed demo data (in-memory mode only)
- * 4. Start the HTTP server
+ * Local dev:  No MONGODB_URI → uses in-memory MongoDB + auto-seeds 50 products
+ * Production: Set MONGODB_URI env var (MongoDB Atlas) → connects directly
  *
  * Usage:
  *   node server.js
@@ -17,14 +15,20 @@ const http     = require("http");
 const mongoose = require("mongoose");
 const app      = require("./app");
 
-const PORT = process.env.PORT || 3000;
+const PORT       = process.env.PORT || 3000;
+const MONGO_URI  = process.env.MONGODB_URI;
+const IS_PROD    = process.env.NODE_ENV === "production";
 
 (async () => {
-  const MONGO_URI = process.env.MONGODB_URI;
   let mongoUri;
 
   if (!MONGO_URI) {
-    // ── Demo mode: no external DB needed ─────────────────
+    if (IS_PROD) {
+      console.error("❌ MONGODB_URI is required in production. Set it in Railway environment variables.");
+      process.exit(1);
+    }
+
+    // ── Local dev: spin up in-memory MongoDB ─────────────
     console.log("🧪 Starting in-memory MongoDB (demo mode)...");
     const { MongoMemoryServer } = require("mongodb-memory-server");
     const mongod = await MongoMemoryServer.create();
@@ -32,14 +36,14 @@ const PORT = process.env.PORT || 3000;
     console.log("✅ In-memory MongoDB started →", mongoUri);
   } else {
     mongoUri = MONGO_URI;
-    console.log("🔗 Connecting to external MongoDB...");
+    console.log("🔗 Connecting to MongoDB Atlas...");
   }
 
   // ── Connect Mongoose ──────────────────────────────────
   await mongoose.connect(mongoUri);
   console.log("✅ MongoDB connected");
 
-  // ── Auto-seed demo data (in-memory mode only) ─────────
+  // ── Auto-seed demo data (local/in-memory only) ────────
   if (!MONGO_URI) {
     console.log("🌱 Seeding demo data...");
     try {
@@ -55,7 +59,7 @@ const PORT = process.env.PORT || 3000;
 
   server.listen(PORT, () => {
     console.log(`\n🚀 Server running on http://localhost:${PORT}  [${process.env.NODE_ENV || "development"}]`);
-    console.log(`   Frontend:  http://localhost:8000\n`);
+    if (!IS_PROD) console.log(`   Frontend:  http://localhost:8000\n`);
   });
 
   server.on("error", (err) => {
