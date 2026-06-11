@@ -62,11 +62,12 @@ app.use(cookieParser());
 const publicDir = process.env.PUBLIC_DIR || path.join(__dirname, 'public');
 app.use('/uploads', express.static(path.join(publicDir, 'uploads')));
 
-// DB connection guard — return 503 immediately when MongoDB is not ready
-// instead of letting queries hang indefinitely
+// DB connection guard — only applies to API routes, not static files
+const API_PREFIXES = ['/main', '/user', '/cart', '/order', '/seller', '/admin'];
 app.use(function checkDB(req, res, next) {
-  // Always allow health check and preflight
+  // Always allow health check, preflight, and non-API routes (static files, SPA)
   if (req.path === '/health' || req.method === 'OPTIONS') return next();
+  if (!API_PREFIXES.some(p => req.path.startsWith(p))) return next();
   // readyState: 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
   if (mongoose.connection.readyState !== 1) {
     return res.status(503).json({
@@ -93,10 +94,21 @@ app.get('/health', (req, res) => {
   });
 });
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// ── Serve Vue SPA (production only) ───────────────────────
+// The frontend build is copied to public/app/ during Railway's build step.
+// All non-API routes fall through to index.html so Vue Router handles them.
+const vueDist = path.join(__dirname, 'public', 'app');
+if (require('fs').existsSync(vueDist)) {
+  app.use(express.static(vueDist, { maxAge: '1y', immutable: true }));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(vueDist, 'index.html'));
+  });
+} else {
+  // catch 404 and forward to error handler (local dev — Vue runs on its own Vite server)
+  app.use(function (req, res, next) {
+    next(createError(404));
+  });
+}
 
 // error handler
 app.use(function (err, req, res, next) {
