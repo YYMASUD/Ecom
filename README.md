@@ -353,6 +353,70 @@ node serve.js              # Serve production build
 
 ---
 
+## ☁️ Deploy to Vercel
+
+### Prerequisites
+- [Vercel account](https://vercel.com) (free)
+- [MongoDB Atlas](https://www.mongodb.com/atlas) free cluster (for the database)
+
+### 1. Set up MongoDB Atlas
+1. Create a free cluster at https://www.mongodb.com/atlas
+2. Create a database user with read/write access
+3. Whitelist all IPs: `0.0.0.0/0` (Network Access)
+4. Copy the connection string: `mongodb+srv://user:pass@cluster.mongodb.net/marketplace`
+
+### 2. Deploy to Vercel
+
+**Option A — Vercel CLI**
+```bash
+npm install -g vercel
+vercel login
+vercel --prod
+```
+
+**Option B — Vercel Dashboard**
+1. Go to https://vercel.com/new
+2. Import your GitHub repo: `cnmasud/Ecommerce_Nodejs`
+3. Vercel auto-detects `vercel.json` — no extra config needed
+
+### 3. Set Environment Variables in Vercel
+
+In your Vercel project → **Settings → Environment Variables**, add:
+
+| Variable | Value |
+|---|---|
+| `MONGODB_URI` | `mongodb+srv://user:pass@cluster.mongodb.net/marketplace` |
+| `JWT_SECRET` | Any long random string (min 32 chars) |
+| `NODE_ENV` | `production` |
+
+### 4. Redeploy
+
+After adding env vars, trigger a redeploy:
+```bash
+vercel --prod
+```
+
+### How it works on Vercel
+
+```
+Vercel Project
+├── /api/index.js        → Serverless function (Express API)
+│     ├── /main/*        → Products, categories, shops
+│     ├── /user/*        → Auth (register, login)
+│     ├── /cart/*        → Cart management
+│     ├── /order/*       → Orders
+│     ├── /seller/*      → Seller dashboard API
+│     ├── /admin/*       → Admin API
+│     └── /health        → Health check
+└── frontend/dist/       → Vue 3 SPA (static files)
+      └── /*             → All other routes → index.html
+```
+
+> **Note:** File uploads (`/uploads`) are not persisted on Vercel (serverless = no filesystem).
+> Use a cloud storage service (Cloudinary, AWS S3) for production file uploads.
+
+---
+
 ## 🤝 Contributing
 
 1. Fork the repository
