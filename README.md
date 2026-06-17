@@ -40,8 +40,8 @@ A **pure Node.js** e-commerce marketplace with a **Vue 3** frontend. Works compl
 
 ```bash
 # 1. Clone
-git clone https://github.com/cnmasud/Ecommerce_Nodejs.git
-cd Ecommerce_Nodejs
+git clone https://github.com/cnmasud/Ecom.git
+cd Ecom
 
 # 2. Install backend dependencies
 cd backend
@@ -77,7 +77,7 @@ All accounts use password: **`demo1234`**
 ## 📁 Project Structure
 
 ```
-Ecommerce_Nodejs/
+Ecom/
 │
 ├── api/                            # ⚡ Vercel Serverless Entry Point
 │   └── index.js                   # Connects MongoDB, auto-seeds, wraps Express app
