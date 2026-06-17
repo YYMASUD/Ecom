@@ -1,16 +1,18 @@
 {
   "version": 2,
+  "framework": null,
+  "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
-    { "source": "/main/:path*",   "destination": "/api/index" },
-    { "source": "/user/:path*",   "destination": "/api/index" },
-    { "source": "/cart/:path*",   "destination": "/api/index" },
-    { "source": "/order/:path*",  "destination": "/api/index" },
-    { "source": "/seller/:path*", "destination": "/api/index" },
-    { "source": "/admin/:path*",  "destination": "/api/index" },
-    { "source": "/uploads/:path*","destination": "/api/index" },
-    { "source": "/health",        "destination": "/api/index" },
-    { "source": "/(.*)",          "destination": "/index.html" }
+    { "source": "/main/:path*",    "destination": "/api/index" },
+    { "source": "/user/:path*",    "destination": "/api/index" },
+    { "source": "/cart/:path*",    "destination": "/api/index" },
+    { "source": "/order/:path*",   "destination": "/api/index" },
+    { "source": "/seller/:path*",  "destination": "/api/index" },
+    { "source": "/admin/:path*",   "destination": "/api/index" },
+    { "source": "/uploads/:path*", "destination": "/api/index" },
+    { "source": "/health",         "destination": "/api/index" },
+    { "source": "/(.*)",           "destination": "/index.html" }
   ]
 }
