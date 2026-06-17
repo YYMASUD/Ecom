@@ -36,6 +36,10 @@ var corsOptions = {
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
+    // Allow any Vercel deployment URL (*.vercel.app)
+    if (origin && origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
     // In development, allow all origins
     if (process.env.NODE_ENV !== 'production') {
       return callback(null, true);
