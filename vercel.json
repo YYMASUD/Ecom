@@ -1,18 +1,25 @@
 {
   "version": 2,
-  "framework": null,
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "outputDirectory": "frontend/dist",
-  "rewrites": [
-    { "source": "/main/:path*",    "destination": "/api/index" },
-    { "source": "/user/:path*",    "destination": "/api/index" },
-    { "source": "/cart/:path*",    "destination": "/api/index" },
-    { "source": "/order/:path*",   "destination": "/api/index" },
-    { "source": "/seller/:path*",  "destination": "/api/index" },
-    { "source": "/admin/:path*",   "destination": "/api/index" },
-    { "source": "/uploads/:path*", "destination": "/api/index" },
-    { "source": "/health",         "destination": "/api/index" },
-    { "source": "/(.*)",           "destination": "/index.html" }
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    },
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/main/(.*)",    "dest": "/api/index" },
+    { "src": "/user/(.*)",    "dest": "/api/index" },
+    { "src": "/cart/(.*)",    "dest": "/api/index" },
+    { "src": "/order/(.*)",   "dest": "/api/index" },
+    { "src": "/seller/(.*)",  "dest": "/api/index" },
+    { "src": "/admin/(.*)",   "dest": "/api/index" },
+    { "src": "/uploads/(.*)", "dest": "/api/index" },
+    { "src": "/health",       "dest": "/api/index" },
+    { "src": "/(.*)",         "dest": "/index.html" }
   ]
 }
