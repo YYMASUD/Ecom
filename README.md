@@ -77,19 +77,26 @@ All accounts use password: **`demo1234`**
 ## 📁 Project Structure
 
 ```
-androdevtraining/
+Ecommerce_Nodejs/
+│
+├── api/                            # ⚡ Vercel Serverless Entry Point
+│   └── index.js                   # Connects MongoDB, auto-seeds, wraps Express app
+│
+├── vercel.json                     # Backend Vercel project config (routes /* → api/index)
+├── package.json                    # Root deps for Vercel (bcryptjs, express, mongoose…)
+│
 ├── backend/                        # Express + Node.js API
-│   ├── server.js                   # Entry point — starts server + in-memory MongoDB
-│   ├── app.js                      # Express app config + middleware
-│   ├── auth.js                     # JWT authentication middleware
+│   ├── server.js                   # Local dev entry point (in-memory MongoDB + seed)
+│   ├── app.js                      # Express app — routes, middleware, CORS
+│   ├── auth.js                     # JWT sign/verify + role guard middleware
 │   ├── upload.js                   # Multer file upload config
-│   ├── package.json
-│   ├── .env.example
+│   ├── package.json                # Backend dependencies
+│   ├── .env.example                # Environment variable template
 │   ├── controllers/
-│   │   ├── index.js                # Public controllers (products, categories, shops, search)
+│   │   ├── index.js                # Public: products, categories, shops, search
 │   │   ├── cart.js                 # Cart CRUD
 │   │   ├── order.js                # Order management
-│   │   ├── user.js                 # User profile
+│   │   ├── user.js                 # Auth: register, login, profile
 │   │   ├── seller/
 │   │   │   ├── product.js          # Seller product CRUD
 │   │   │   ├── review.js           # Seller review management
@@ -101,56 +108,59 @@ androdevtraining/
 │   │       ├── site.js             # Admin site settings
 │   │       └── user.js             # Admin user management
 │   ├── models/
-│   │   ├── product.js
+│   │   ├── product.js              # Product + ProductCategory schemas
 │   │   ├── category.js
 │   │   ├── shop.js
-│   │   ├── user.js
+│   │   ├── user.js                 # User + Role schemas
 │   │   ├── review.js
-│   │   ├── site.js
+│   │   ├── site.js                 # Site metadata schema
 │   │   ├── cart.js
 │   │   └── order.js
 │   ├── routes/
 │   │   ├── main.js                 # Public API routes
-│   │   ├── user.js                 # Auth routes
+│   │   ├── user.js                 # Auth routes (register, login)
 │   │   ├── cart.js
 │   │   ├── order.js
-│   │   ├── seller.js
-│   │   └── admin.js
+│   │   ├── seller.js               # Seller-only routes (role guard)
+│   │   └── admin.js                # Admin-only routes (role guard)
 │   └── scripts/
 │       ├── seedDemo.js             # Seeds 50 products, 10 categories, 5 shops, 3 users
-│       └── seedRoles.js            # Seeds roles (admin/seller/customer)
+│       └── seedRoles.js            # Seeds roles (admin / seller / customer)
 │
 └── frontend/                       # Vue 3 + Vite + Tailwind CSS + DaisyUI
     ├── index.html
-    ├── serve.js                    # Static file server for production build
+    ├── vercel.json                 # Frontend Vercel project config (SPA fallback)
+    ├── serve.js                    # Static file server for local production preview
     ├── vite.config.js
     ├── tailwind.config.js
+    ├── .env.example                # VITE_BACKENDURL=http://localhost:3000
+    ├── .env.production             # VITE_BACKENDURL= (empty = same origin, set by Vercel)
     ├── public/
     │   └── manifest.json           # PWA manifest
     └── src/
-        ├── main.js
-        ├── App.vue                 # Root component — navbar, footer, mobile bottom nav
+        ├── main.js                 # App bootstrap — Vue, Pinia, Router
+        ├── App.vue                 # Root: navbar, footer, mobile bottom nav, toasts
         ├── index.css               # Tailwind base styles
         ├── router/
-        │   └── index.js            # All routes incl. 404 catch-all
-        ├── stores/                 # Pinia stores
-        │   ├── user.js             # Auth state + JWT
-        │   ├── cart.js             # Cart state (local + backend sync)
+        │   └── index.js            # All routes + 404 catch-all
+        ├── stores/                 # Pinia state management
+        │   ├── user.js             # Auth state + JWT token
+        │   ├── cart.js             # Cart (local storage + backend sync)
         │   └── notification.js     # Toast notification queue
         ├── components/
-        │   ├── SearchBar.vue       # Live dropdown search (debounced, backend-connected)
+        │   ├── SearchBar.vue       # Live debounced search dropdown
         │   ├── ProductGrid.vue     # Responsive product card grid
         │   ├── ImageSlideShow.vue  # Hero image carousel
-        │   ├── ToastNotification.vue # Slide-in toast from right edge
-        │   ├── admin/              # Admin-specific components
+        │   ├── ToastNotification.vue # Slide-in toast (right edge)
+        │   ├── admin/              # Admin panel components
         │   └── dashboard/          # Seller dashboard components
         ├── utils/
         │   └── categoryIcons.js    # 80+ category name → emoji mappings
         └── views/
-            ├── HomeView.vue        # Hero carousel + featured products + shops
-            ├── ProductsView.vue    # All products — filter, sort, paginate
+            ├── HomeView.vue        # Hero + featured products + categories + shops
+            ├── ProductsView.vue    # All products (filter, sort, paginate)
             ├── ProductView.vue     # Single product detail + reviews
-            ├── CategoriesView.vue  # All categories with sample images
+            ├── CategoriesView.vue  # Category grid with icons
             ├── CategoryView.vue    # Products filtered by category
             ├── ShopsView.vue       # All shops listing
             ├── ShopView.vue        # Single shop storefront
