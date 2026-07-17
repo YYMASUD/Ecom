@@ -21,8 +21,10 @@ var app = express();
 global.__basedir = __dirname;
 
 // CORS — allow frontend origins (supports both desktop + mobile browsers)
+// Build allowed origins list — includes any FRONTEND_URL set in env
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:8000',
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+  'http://localhost:8000',
   'http://localhost:3000',
   'http://localhost:5173',
   'http://127.0.0.1:8000',

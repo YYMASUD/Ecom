@@ -3,12 +3,13 @@
  *
  * Wraps the Express app for Vercel deployment.
  * - Caches the MongoDB connection across warm invocations
- * - Auto-seeds 50 demo products on first deploy (when DB is empty)
+ * - Auto-seeds 200 demo products on first deploy (when DB is empty)
  *
  * Required environment variables in Vercel dashboard:
- *   MONGODB_URI  — MongoDB Atlas connection string
- *   JWT_SECRET   — Secret key for JWT signing
- *   NODE_ENV     — Set to "production"
+ *   MONGODB_URI    — MongoDB Atlas connection string
+ *   JWT_SECRET     — Secret key for JWT signing (min 32 chars)
+ *   NODE_ENV       — "production"
+ *   FRONTEND_URL   — Your Vercel frontend URL e.g. https://your-app.vercel.app
  */
 
 const mongoose = require("mongoose");
@@ -31,8 +32,9 @@ async function connectDB() {
   }
 
   await mongoose.connect(uri, {
-    bufferCommands: false,
+    bufferCommands:          false,
     serverSelectionTimeoutMS: 5000,
+    maxPoolSize:             10,
   });
 
   isConnected = true;
@@ -40,24 +42,23 @@ async function connectDB() {
 }
 
 async function seedIfEmpty() {
-  if (isSeeded) return; // already checked this invocation cycle
+  if (isSeeded) return;
 
   try {
-    // Dynamically require the Product model (already registered by app.js imports)
     const { Product } = require("../backend/models/product");
     const count = await Product.countDocuments();
 
     if (count === 0) {
-      console.log("🌱 Database empty — seeding demo data...");
+      console.log("🌱 Database empty — seeding 200 demo products...");
       const { run } = require("../backend/scripts/seedDemo");
-      // Pass the URI so the seed function reuses the existing connection
       await run(process.env.MONGODB_URI);
-      console.log("✅ Demo data seeded (50 products, 10 categories, 5 shops, 3 users)");
+      console.log("✅ Demo data seeded: 200 products, 10 categories, 5 shops, 3 users");
+    } else {
+      console.log(`ℹ️  Database already has ${count} products — skipping seed`);
     }
 
     isSeeded = true;
   } catch (err) {
-    // Non-fatal — app still works, just without demo data
     console.warn("⚠️  Auto-seed skipped:", err.message);
   }
 }

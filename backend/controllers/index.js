@@ -14,30 +14,44 @@ async function showSite(req, res, next) {
   }
 }
 
-// Retrieve all product categories
+// Retrieve all product categories — includes real productCount via aggregation
 async function listAllCategories(req, res, next) {
   try {
-    const categories = await ProductCategory.find({});
+    const categories = await ProductCategory.aggregate([
+      {
+        $project: {
+          name: 1,
+          products: 1,
+          created_at: 1,
+          productCount: { $size: { $ifNull: ['$products', []] } },
+        },
+      },
+      { $sort: { name: 1 } },
+    ]);
     res.json(categories);
   } catch (err) {
     next(err);
   }
 }
 
-// Retrieve recently created products
+// Retrieve recently created products (up to 100, with category refs)
 async function listRecentProducts(req, res, next) {
   try {
-    const products = await Product.find({}).sort({ created_at: -1 }).limit(15);
+    const products = await Product
+      .find({})
+      .populate('categories', '_id name')
+      .sort({ created_at: -1 })
+      .limit(100);
     res.json(products);
   } catch (err) {
     next(err);
   }
 }
 
-// Retrieve recently created shops
+// Retrieve recently created shops (up to 20)
 async function listRecentShops(req, res, next) {
   try {
-    const shops = await Shop.find({}).sort({ created_at: -1 }).limit(15);
+    const shops = await Shop.find({}).sort({ created_at: -1 }).limit(20);
     res.json(shops);
   } catch (err) {
     next(err);
@@ -70,17 +84,25 @@ async function searchProducts(req, res, next) {
   }
 }
 
-// Retrieve one single product category
+// Retrieve one single product category with fully populated products
 async function showCategory(req, res, next) {
   try {
     if (!req.query.categoryID) {
       return res.status(400).json({ success: false, message: "categoryID is required" });
     }
-    const category = await ProductCategory.findById(req.query.categoryID).populate("products");
+    const category = await ProductCategory
+      .findById(req.query.categoryID)
+      .populate({
+        path: 'products',
+        options: { sort: { created_at: -1 } },
+      });
     if (!category) {
       return res.status(404).json({ success: false, message: "Category not found" });
     }
-    res.json(category);
+    // Attach productCount for convenience
+    const result = category.toObject();
+    result.productCount = result.products ? result.products.length : 0;
+    res.json(result);
   } catch (err) {
     next(err);
   }
