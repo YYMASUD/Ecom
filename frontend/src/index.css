@@ -1,3 +1,173 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Brand CSS Variables ─────────────────────────── */
+:root {
+  --brand-orange: #FF6B35;
+  --brand-navy: #131921;
+  --brand-navy-light: #232F3E;
+  --brand-teal: #007185;
+  --brand-yellow: #FFA41C;
+  --brand-bg: #EAEDED;
+  --brand-text: #0F1111;
+}
+
+/* ── Base ─────────────────────────────────────────── */
+[data-theme="shophub"] {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--brand-bg);
+  color: var(--brand-text);
+  scroll-behavior: smooth;
+}
+
+/* ── Custom Scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c5c5c5; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #FF6B35; }
+
+/* ── Global Resets & Helpers ──────────────────────── */
+* { box-sizing: border-box; }
+img { max-width: 100%; }
+
+/* ── Amazon-style Header ──────────────────────────── */
+.sh-header {
+  background-color: var(--brand-navy);
+  color: #fff;
+}
+.sh-header-nav {
+  background-color: var(--brand-navy-light);
+  color: #fff;
+}
+.sh-header-nav a:hover {
+  outline: 1px solid white;
+  outline-offset: -1px;
+}
+
+/* ── Search Bar ───────────────────────────────────── */
+.sh-search-wrap {
+  display: flex;
+  align-items: stretch;
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+}
+.sh-search-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 12px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: #0F1111;
+  background: #fff;
+  min-width: 0;
+}
+.sh-search-btn {
+  background-color: var(--brand-orange);
+  border: none;
+  padding: 0 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.sh-search-btn:hover { background-color: #e85c25; }
+
+/* ── Orange CTA Button ────────────────────────────── */
+@layer components {
+  .btn-cta {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-150 cursor-pointer select-none;
+    background-color: var(--brand-orange);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+  }
+  .btn-cta:hover { background-color: #e85c25; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,107,53,0.35); }
+  .btn-cta:active { transform: translateY(0); }
+  .btn-cta:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-cta-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-150 cursor-pointer;
+    border: 2px solid var(--brand-orange);
+    color: var(--brand-orange);
+    background: transparent;
+    padding: 8px 18px;
+  }
+  .btn-cta-outline:hover { background-color: var(--brand-orange); color: #fff; }
+
+  /* Product card */
+  .sh-product-card {
+    @apply bg-white rounded-lg overflow-hidden transition-all duration-200 border border-gray-100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .sh-product-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    border-color: #FF6B35;
+  }
+
+  /* Star rating */
+  .sh-stars {
+    @apply flex items-center gap-0.5;
+    color: var(--brand-yellow);
+  }
+
+  /* Section title */
+  .sh-section-title {
+    @apply text-xl md:text-2xl font-bold text-gray-900 mb-1;
+  }
+  .sh-section-link {
+    @apply text-sm font-medium;
+    color: var(--brand-teal);
+  }
+  .sh-section-link:hover { text-decoration: underline; }
+
+  /* Teal link */
+  .sh-link {
+    color: var(--brand-teal);
+    cursor: pointer;
+  }
+  .sh-link:hover { text-decoration: underline; color: var(--brand-orange); }
+
+  /* Page section wrapper */
+  .sh-section {
+    @apply bg-white rounded-lg shadow-sm border border-gray-100 p-5 md:p-6;
+  }
+}
+
+/* ── Transitions ──────────────────────────────────── */
+.fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* ── Highlight on focus for inputs ───────────────── */
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--brand-orange) !important;
+  outline-offset: 1px;
+}
+
+/* ── Price styling ────────────────────────────────── */
+.sh-price {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #B12704;
+}
+.sh-price-lg {
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: #B12704;
+}
+
+/* ── Badge new / sale ─────────────────────────────── */
+.sh-badge-new {
+  @apply text-xs font-bold px-2 py-0.5 rounded-full;
+  background: #007185;
+  color: #fff;
+}
+.sh-badge-sale {
+  @apply text-xs font-bold px-2 py-0.5 rounded-full;
+  background: #CC0C39;
+  color: #fff;
+}
